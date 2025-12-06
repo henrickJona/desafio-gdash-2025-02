@@ -1,0 +1,68 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # painel web
+
+  api:
+    build:
+      context: ./api
+    container_name: nest-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  python:
+    build:
+      context: ./python-service
+    container_name: python-service
+    restart: unless-stopped
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./python-service/.env
+    depends_on:
+      - mongo
+
+  worker:
+    build:
+      context: ./go-worker
+    container_name: go-worker
+    restart: unless-stopped
+    env_file:
+      - ./go-worker/.env
+    depends_on:
+      - api
+      - python
+      - mongo
+      - rabbitmq # adicionando dependência
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: react-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+      - python
+
+volumes:
+  mongo_data:

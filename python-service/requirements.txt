@@ -1,0 +1,7 @@
+# requirements.txt
+fastapi
+uvicorn
+pandas
+pydantic
+pika
+requests  # 👈 ESSENCIAL para a função get_data_from_open_meteo()

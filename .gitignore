@@ -1,0 +1,33 @@
+# Node / Nest
+**/node_modules/
+**/package-lock.json
+**/yarn.lock
+
+# Coverage
+**/coverage/
+
+
+# React build
+**/build/
+**/dist/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/env/
+**/venv/
+
+# Go
+**/bin/
+**/*.exe
+
+# Docker / Compose
+*.env
+docker-compose.override.yml
+mongo_data/
+
+# IDE / OS
+.vscode/
+.DS_Store
